@@ -9,9 +9,7 @@ import 'package:flutter/material.dart';
 const kReceiveTimeout = 60000;
 const kConnectTimeout = 60000;
 
-Dio httpClient({
-  required String clientId,
-}) {
+Dio httpClient() {
   final dio = Dio();
 
   // set default timeout value
