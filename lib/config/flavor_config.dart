@@ -3,10 +3,8 @@ enum Flavor { staging, production, development }
 class FlavorValues {
   const FlavorValues({
     required this.baseUrl,
-    required this.clientId,
   });
   final String baseUrl;
-  final String clientId;
 }
 
 class FlavorConfig {
