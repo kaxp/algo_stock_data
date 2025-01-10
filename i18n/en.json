@@ -1,3 +1,7 @@
 {
-  "noInternetConnection": "Data transmission lost!\nCheck your internet connection and try again."
+  "noInternetConnection": "Data transmission lost!\nCheck your internet connection and try again.",
+  "networkErrorMessage": "Make sure you are connected to an internet connection and please try again.",
+  "networkRequestCanceled": "Request cancelled",
+  "invalidClientIdError": "Client Id is invalid, please check and try again",
+  "unknownError": "Uh-oh! Looks like a hiccup in the system. Please try again later."
 }
