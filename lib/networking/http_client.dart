@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:algo_test/networking/interceptors/request_interceptor.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
 import 'package:flutter/material.dart';
@@ -21,6 +22,8 @@ Dio httpClient({
 
   dio.interceptors
       .add(LogInterceptor(logPrint: (msg) => debugPrint(msg.toString())));
+
+  dio.interceptors.add(RequestInterceptor());
 
   // add ssl certificate check
   (dio.httpClientAdapter as IOHttpClientAdapter).createHttpClient =
