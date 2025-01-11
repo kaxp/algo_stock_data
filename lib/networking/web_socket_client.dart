@@ -7,19 +7,18 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 // TODO(kapil): Refactor the socket client types when integrating API
 class WebSocketClient<T> {
-  final String url;
   WebSocketChannel? _channel;
   int _reconnectAttempts = 0;
   final int _maxReconnectAttempts = 5;
   final Duration _initialDelay = const Duration(seconds: 2);
+  late String url;
 
   // Stream controller to emit raw messages received from the server
   final StreamController<T> _controller = StreamController<T>.broadcast();
 
-  WebSocketClient(this.url);
-
-  Future<void> connect() async {
-    _channel = WebSocketChannel.connect(Uri.parse(url));
+  Future<void> connect({required String socketUrl}) async {
+    url = socketUrl;
+    _channel = WebSocketChannel.connect(Uri.parse(socketUrl));
     listenForMessages();
 
     // We can add Heartbeat/Ping-Pong Mechanism here if required
@@ -36,26 +35,26 @@ class WebSocketClient<T> {
       (message) {
         _controller.add(message);
       },
-      onError: handleError,
-      onDone: handleClosed,
+      onError: _handleError,
+      onDone: _handleClosed,
     );
   }
 
-  void handleError(Object error) {
+  void _handleError(Object error) {
     Log.error("${AppStrings.error}: $error");
 
     // Start reconnection process on error
-    reconnect();
+    _reconnect();
   }
 
-  void handleClosed() {
+  void _handleClosed() {
     Log.debug(AppStrings.webSocketClosed);
 
     // Start reconnection process when WebSocket is closed
-    reconnect();
+    _reconnect();
   }
 
-  Future<void> reconnect() async {
+  Future<void> _reconnect() async {
     if (_reconnectAttempts >= _maxReconnectAttempts) {
       Log.error(AppStrings.maxReconnectionAttemptsReached);
       return;
@@ -70,7 +69,7 @@ class WebSocketClient<T> {
     await Future.delayed(delay);
 
     try {
-      await connect();
+      await connect(socketUrl: url);
       Log.debug(AppStrings.reconnectionSuccessful);
 
       // Reset attempts after successful reconnect
@@ -79,7 +78,7 @@ class WebSocketClient<T> {
       Log.error("${AppStrings.reconnectingAttemptFailed}: $e");
 
       // Retry reconnection if failed
-      reconnect();
+      _reconnect();
     }
   }
 
