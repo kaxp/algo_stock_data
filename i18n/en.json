@@ -3,5 +3,11 @@
   "networkErrorMessage": "Make sure you are connected to an internet connection and please try again.",
   "networkRequestCanceled": "Request cancelled",
   "invalidClientIdError": "Client Id is invalid, please check and try again",
-  "unknownError": "Uh-oh! Looks like a hiccup in the system. Please try again later."
+  "unknownError": "Uh-oh! Looks like a hiccup in the system. Please try again later.",
+  "webSocketClosed": "WebSocket closed",
+  "maxReconnectionAttemptsReached": "Max reconnection attempts reached. Stopping reconnection.",
+  "reconnectionSuccessful": "Reconnected successfully!",
+  "attemptingToReconnectIn": "Attempting to reconnect in",
+  "reconnectingAttemptFailed": "Reconnect attempt failed",
+  "error": "Error"
 }
