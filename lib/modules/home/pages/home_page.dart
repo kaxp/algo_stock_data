@@ -2,7 +2,9 @@ import 'package:algo_test/components/atoms/typography/header3.dart';
 import 'package:algo_test/components/atoms/typography/header4.dart';
 import 'package:algo_test/config/themes/assets/app_colors.dart';
 import 'package:algo_test/constants/spacing_constants.dart';
+import 'package:algo_test/modules/home/blocs/home_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -12,6 +14,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _homeBloc = Modular.get<HomeBloc>();
+
   // Dummy data for the table
   final List<Map<String, dynamic>> tableData = List.generate(
     50,
@@ -21,6 +25,12 @@ class _HomePageState extends State<HomePage> {
       'putLTP': (5 + index * 0.5).toStringAsFixed(2),
     },
   );
+
+  @override
+  void initState() {
+    super.initState();
+    _homeBloc.getOptionChainsWithLtp();
+  }
 
   @override
   Widget build(BuildContext context) {
