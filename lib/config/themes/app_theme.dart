@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 mixin AppTheme {
   static final defaultTheme = ThemeData(
-    scaffoldBackgroundColor: AppColors.white,
-    primaryColor: Colors.white,
+    scaffoldBackgroundColor: AppColors.backgroundColor,
+    primaryColor: AppColors.white,
     brightness: Brightness.dark,
     fontFamily: 'Poppins',
     textTheme: ThemeData.light().textTheme.copyWith(
@@ -62,6 +62,10 @@ mixin AppTheme {
         fontFamily: 'Poppins',
         color: Colors.white,
       ),
+      backgroundColor: AppColors.backgroundColor,
+      foregroundColor: AppColors.backgroundColor,
+      elevation: 0,
+      scrolledUnderElevation: 0,
     ),
     iconTheme: IconThemeData(
       color: Colors.grey[600],
