@@ -41,7 +41,8 @@ class _HomeApiClient implements HomeApiClient {
   }
 
   @override
-  Future<OptionChainResponse> getOptionChain({required underlyingValue}) async {
+  Future<OptionChainResponse> getOptionChainWithLTP(
+      {required underlyingValue}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'underlying': underlyingValue};
     final _headers = <String, dynamic>{};

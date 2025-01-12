@@ -10,6 +10,8 @@ class HomeRepo {
 
   Future<OptionChainResponse> getOptionChains(
       {required String underlyingValue}) async {
-    return _homeApiClient.getOptionChain(underlyingValue: underlyingValue);
+    return _homeApiClient.getOptionChainWithLTP(
+      underlyingValue: underlyingValue,
+    );
   }
 }

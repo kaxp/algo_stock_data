@@ -30,7 +30,7 @@ abstract class HomeApiClient {
   });
 
   @GET('/option-chain-with-ltp')
-  Future<OptionChainResponse> getOptionChain({
+  Future<OptionChainResponse> getOptionChainWithLTP({
     @Query('underlying') required String underlyingValue,
   });
 }
