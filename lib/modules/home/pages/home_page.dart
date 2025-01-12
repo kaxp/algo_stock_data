@@ -1,4 +1,7 @@
+import 'package:algo_test/components/atoms/typography/header3.dart';
+import 'package:algo_test/components/atoms/typography/header4.dart';
 import 'package:algo_test/config/themes/assets/app_colors.dart';
+import 'package:algo_test/constants/spacing_constants.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -33,36 +36,30 @@ class _HomePageState extends State<HomePage> {
           // Data Header
           Container(
             padding: const EdgeInsets.symmetric(
-              vertical: 8,
-              horizontal: 16,
+              vertical: kSpacingSmall,
+              horizontal: kSpacingMedium,
             ),
             color: AppColors.secondaryColor,
             child: const Row(
               children: [
                 Expanded(
-                  child: Text(
-                    'Call LTP',
-                    style: TextStyle(
-                      color: AppColors.greyTextColor,
-                    ),
+                  child: Header4(
+                    title: 'Call LTP',
+                    color: AppColors.greyTextColor,
                     textAlign: TextAlign.start,
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    'Strike',
-                    style: TextStyle(
-                      color: AppColors.yellowColor,
-                    ),
+                  child: Header4(
+                    title: 'Strike',
+                    color: AppColors.yellowColor,
                     textAlign: TextAlign.center,
                   ),
                 ),
                 Expanded(
-                  child: Text(
-                    'Put LTP',
-                    style: TextStyle(
-                      color: AppColors.greyTextColor,
-                    ),
+                  child: Header4(
+                    title: 'Put LTP',
+                    color: AppColors.greyTextColor,
                     textAlign: TextAlign.end,
                   ),
                 ),
@@ -71,52 +68,40 @@ class _HomePageState extends State<HomePage> {
           ),
           // Data Rows
           Expanded(
-            child: ListView.builder(
+            child: ListView.separated(
               shrinkWrap: true,
               itemCount: tableData.length,
               itemBuilder: (context, index) {
                 final row = tableData[index];
                 return Container(
                   padding: const EdgeInsets.symmetric(
-                    vertical: 8,
-                    horizontal: 16,
-                  ),
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(
-                        color: AppColors.dividerColour,
-                        width: 0.75,
-                      ),
-                    ),
+                    vertical: kSpacingSmall,
+                    horizontal: kSpacingMedium,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Expanded(
-                        child: Text(
-                          row['callLTP']!,
-                          style: const TextStyle(
-                            color: AppColors.white,
-                          ),
+                        child: Header3(
+                          title: row['callLTP']!,
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w400,
                           textAlign: TextAlign.start,
                         ),
                       ),
                       Expanded(
-                        child: Text(
-                          row['strike']!,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.white,
-                          ),
+                        child: Header3(
+                          title: row['strike']!,
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w700,
                           textAlign: TextAlign.center,
                         ),
                       ),
                       Expanded(
-                        child: Text(
-                          row['putLTP']!,
-                          style: const TextStyle(
-                            color: AppColors.white,
-                          ),
+                        child: Header3(
+                          title: row['putLTP']!,
+                          color: AppColors.white,
+                          fontWeight: FontWeight.w400,
                           textAlign: TextAlign.end,
                         ),
                       ),
@@ -124,6 +109,10 @@ class _HomePageState extends State<HomePage> {
                   ),
                 );
               },
+              separatorBuilder: (context, index) => const Divider(
+                color: AppColors.dividerColour,
+                height: 1,
+              ),
             ),
           ),
         ],
