@@ -27,11 +27,24 @@ class HomeBloc extends Cubit<HomeState> {
         underlyingValue: underlyingValue,
       );
 
-      emit(response.options.isNotEmpty
-          ? HomeLoaded(data: response)
-          : HomeEmpty());
+      if (response.options.isNotEmpty) {
+        final expiryDates = response.options.keys.toList();
+
+        emit(HomeLoaded(
+          optionsData: response,
+          expiryDates: expiryDates,
+          currentExpiryDate: expiryDates.first,
+        ));
+      } else {
+        emit(HomeEmpty());
+      }
     } on DioException catch (error) {
-      emit(HomeError(error.errorMessage()));
+      emit(HomeError(
+        errorMessage: error.errorMessage(),
+        optionsData: state.optionsData!,
+        expiryDates: state.expiryDates,
+        currentExpiryDate: state.currentExpiryDate,
+      ));
     }
   }
 }
