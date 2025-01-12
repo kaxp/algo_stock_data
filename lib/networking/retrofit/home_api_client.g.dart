@@ -19,9 +19,9 @@ class _HomeApiClient implements HomeApiClient {
   String? baseUrl;
 
   @override
-  Future<dynamic> getContracts() async {
+  Future<dynamic> getContracts({required underlyingValue}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'underlying': underlyingValue};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
     final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
@@ -31,7 +31,7 @@ class _HomeApiClient implements HomeApiClient {
     )
         .compose(
           _dio.options,
-          '/contracts?underlying=BANKNIFTY',
+          '/contracts',
           queryParameters: queryParameters,
           data: _data,
         )
@@ -41,24 +41,25 @@ class _HomeApiClient implements HomeApiClient {
   }
 
   @override
-  Future<dynamic> getOptionChain() async {
+  Future<OptionChainResponse> getOptionChain({required underlyingValue}) async {
     const _extra = <String, dynamic>{};
-    final queryParameters = <String, dynamic>{};
+    final queryParameters = <String, dynamic>{r'underlying': underlyingValue};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<OptionChainResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/option-chain-with-ltp?underlying=BANKNIFTY',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
+            .compose(
+              _dio.options,
+              '/option-chain-with-ltp',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = OptionChainResponse.fromJson(_result.data!);
     return value;
   }
 
