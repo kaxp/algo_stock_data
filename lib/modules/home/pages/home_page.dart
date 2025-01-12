@@ -43,7 +43,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'Call LTP',
                     style: TextStyle(
-                      color: AppColors.white,
+                      color: AppColors.greyTextColor,
                     ),
                     textAlign: TextAlign.start,
                   ),
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'Strike',
                     style: TextStyle(
-                      color: AppColors.white,
+                      color: AppColors.yellowColor,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage> {
                   child: Text(
                     'Put LTP',
                     style: TextStyle(
-                      color: AppColors.white,
+                      color: AppColors.greyTextColor,
                     ),
                     textAlign: TextAlign.end,
                   ),
@@ -96,7 +96,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           row['callLTP']!,
                           style: const TextStyle(
-                            color: AppColors.yellowColor,
+                            color: AppColors.white,
                           ),
                           textAlign: TextAlign.start,
                         ),
@@ -115,7 +115,7 @@ class _HomePageState extends State<HomePage> {
                         child: Text(
                           row['putLTP']!,
                           style: const TextStyle(
-                            color: AppColors.redColor,
+                            color: AppColors.white,
                           ),
                           textAlign: TextAlign.end,
                         ),
