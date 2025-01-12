@@ -1,3 +1,4 @@
+import 'package:algo_test/modules/home/home_module.dart';
 import 'package:algo_test/networking/http_client.dart';
 import 'package:algo_test/networking/models/app_dio.dart';
 import 'package:algo_test/networking/web_socket_client.dart';
@@ -19,7 +20,12 @@ class BaseAppModule extends Module {
       ];
 
   @override
-  List<ModularRoute> get routes => [];
+  List<ModularRoute> get routes => [
+        ModuleRoute(
+          BaseAppModuleRoutes.homePage,
+          module: HomeModule(),
+        ),
+      ];
 }
 
 class BaseAppModuleRoutes {
