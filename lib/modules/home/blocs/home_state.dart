@@ -9,11 +9,12 @@ class HomeInitial extends HomeState {}
 
 class HomeLoading extends HomeState {}
 
-class HomeLoaded extends HomeState {
-  // TODO(kapil): Update with actual data type
-  final dynamic data;
+class HomeEmpty extends HomeState {}
 
-  HomeLoaded(this.data);
+class HomeLoaded extends HomeState {
+  final OptionChainResponse data;
+
+  HomeLoaded({required this.data});
 
   @override
   List<Object> get props => [data];

@@ -1,3 +1,4 @@
+import 'package:algo_test/modules/home/models/option_chain_response.dart';
 import 'package:algo_test/networking/constants/network_constants.dart';
 import 'package:algo_test/networking/models/app_dio.dart';
 import 'package:dio/dio.dart';
@@ -23,10 +24,13 @@ abstract class HomeApiClient {
   }
 
   // TODO(kapil): Update return type in follow UP PRs
-  @GET('/contracts?underlying=BANKNIFTY')
-  Future<dynamic> getContracts();
+  @GET('/contracts')
+  Future<dynamic> getContracts({
+    @Query('underlying') required String underlyingValue,
+  });
 
-  // TODO(kapil): Update return type in follow UP PRs
-  @GET('/option-chain-with-ltp?underlying=BANKNIFTY')
-  Future<dynamic> getOptionChain();
+  @GET('/option-chain-with-ltp')
+  Future<OptionChainResponse> getOptionChain({
+    @Query('underlying') required String underlyingValue,
+  });
 }
