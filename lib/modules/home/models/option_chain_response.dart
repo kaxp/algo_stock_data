@@ -6,19 +6,19 @@ part 'option_chain_response.g.dart';
 // API that is required for this task.
 @JsonSerializable(explicitToJson: true)
 class OptionChainResponse {
+  const OptionChainResponse({
+    required this.candle,
+    required this.underlying,
+    required this.options,
+    required this.impliedFutures,
+  });
+
   final String candle;
   final String underlying;
   final Map<String, OptionData> options;
 
   @JsonKey(name: 'implied_futures')
   final Map<String, double> impliedFutures;
-
-  OptionChainResponse({
-    required this.candle,
-    required this.underlying,
-    required this.options,
-    required this.impliedFutures,
-  });
 
   factory OptionChainResponse.fromJson(Map<String, dynamic> json) =>
       _$OptionChainResponseFromJson(json);
@@ -28,6 +28,12 @@ class OptionChainResponse {
 
 @JsonSerializable(explicitToJson: true)
 class OptionData {
+  const OptionData({
+    required this.strike,
+    this.callClose,
+    this.putClose,
+  });
+
   final List<double> strike;
 
   @JsonKey(name: 'call_close')
@@ -35,12 +41,6 @@ class OptionData {
 
   @JsonKey(name: 'put_close')
   final List<double?>? putClose;
-
-  OptionData({
-    required this.strike,
-    this.callClose,
-    this.putClose,
-  });
 
   factory OptionData.fromJson(Map<String, dynamic> json) =>
       _$OptionDataFromJson(json);
