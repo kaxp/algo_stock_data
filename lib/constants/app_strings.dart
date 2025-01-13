@@ -18,4 +18,5 @@ class AppStrings {
   static String strike = 'strike'.tr();
   static String noDataFound = 'noDataFound'.tr();
   static String noResultFound = 'noResultFound'.tr();
+  static String algoTest = 'algoTest'.tr();
 }
