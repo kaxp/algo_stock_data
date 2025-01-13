@@ -78,6 +78,16 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as bool);
 
   @override
+  _i4.Future<void> getValidContracts() => (super.noSuchMethod(
+        Invocation.method(
+          #getValidContracts,
+          [],
+        ),
+        returnValue: _i4.Future<void>.value(),
+        returnValueForMissingStub: _i4.Future<void>.value(),
+      ) as _i4.Future<void>);
+
+  @override
   _i4.Future<void> getOptionChainsWithLtp() => (super.noSuchMethod(
         Invocation.method(
           #getOptionChainsWithLtp,

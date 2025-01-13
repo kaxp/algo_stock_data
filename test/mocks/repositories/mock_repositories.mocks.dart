@@ -3,11 +3,12 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
+import 'package:algo_test/modules/home/models/contracts_response.dart' as _i2;
 import 'package:algo_test/modules/home/models/option_chain_response.dart'
-    as _i2;
-import 'package:algo_test/modules/home/repositories/home_repo.dart' as _i3;
+    as _i3;
+import 'package:algo_test/modules/home/repositories/home_repo.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
 // ignore_for_file: type=lint
@@ -23,9 +24,20 @@ import 'package:mockito/mockito.dart' as _i1;
 // ignore_for_file: camel_case_types
 // ignore_for_file: subtype_of_sealed_class
 
-class _FakeOptionChainResponse_0 extends _i1.SmartFake
-    implements _i2.OptionChainResponse {
-  _FakeOptionChainResponse_0(
+class _FakeContractsResponse_0 extends _i1.SmartFake
+    implements _i2.ContractsResponse {
+  _FakeContractsResponse_0(
+    Object parent,
+    Invocation parentInvocation,
+  ) : super(
+          parent,
+          parentInvocation,
+        );
+}
+
+class _FakeOptionChainResponse_1 extends _i1.SmartFake
+    implements _i3.OptionChainResponse {
+  _FakeOptionChainResponse_1(
     Object parent,
     Invocation parentInvocation,
   ) : super(
@@ -37,9 +49,38 @@ class _FakeOptionChainResponse_0 extends _i1.SmartFake
 /// A class which mocks [HomeRepo].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockHomeRepo extends _i1.Mock implements _i3.HomeRepo {
+class MockHomeRepo extends _i1.Mock implements _i4.HomeRepo {
   @override
-  _i4.Future<_i2.OptionChainResponse> getOptionChains(
+  _i5.Future<_i2.ContractsResponse> getContracts(
+          {required String? underlyingValue}) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #getContracts,
+          [],
+          {#underlyingValue: underlyingValue},
+        ),
+        returnValue:
+            _i5.Future<_i2.ContractsResponse>.value(_FakeContractsResponse_0(
+          this,
+          Invocation.method(
+            #getContracts,
+            [],
+            {#underlyingValue: underlyingValue},
+          ),
+        )),
+        returnValueForMissingStub:
+            _i5.Future<_i2.ContractsResponse>.value(_FakeContractsResponse_0(
+          this,
+          Invocation.method(
+            #getContracts,
+            [],
+            {#underlyingValue: underlyingValue},
+          ),
+        )),
+      ) as _i5.Future<_i2.ContractsResponse>);
+
+  @override
+  _i5.Future<_i3.OptionChainResponse> getOptionChains(
           {required String? underlyingValue}) =>
       (super.noSuchMethod(
         Invocation.method(
@@ -47,8 +88,8 @@ class MockHomeRepo extends _i1.Mock implements _i3.HomeRepo {
           [],
           {#underlyingValue: underlyingValue},
         ),
-        returnValue: _i4.Future<_i2.OptionChainResponse>.value(
-            _FakeOptionChainResponse_0(
+        returnValue: _i5.Future<_i3.OptionChainResponse>.value(
+            _FakeOptionChainResponse_1(
           this,
           Invocation.method(
             #getOptionChains,
@@ -56,8 +97,8 @@ class MockHomeRepo extends _i1.Mock implements _i3.HomeRepo {
             {#underlyingValue: underlyingValue},
           ),
         )),
-        returnValueForMissingStub: _i4.Future<_i2.OptionChainResponse>.value(
-            _FakeOptionChainResponse_0(
+        returnValueForMissingStub: _i5.Future<_i3.OptionChainResponse>.value(
+            _FakeOptionChainResponse_1(
           this,
           Invocation.method(
             #getOptionChains,
@@ -65,5 +106,5 @@ class MockHomeRepo extends _i1.Mock implements _i3.HomeRepo {
             {#underlyingValue: underlyingValue},
           ),
         )),
-      ) as _i4.Future<_i2.OptionChainResponse>);
+      ) as _i5.Future<_i3.OptionChainResponse>);
 }
