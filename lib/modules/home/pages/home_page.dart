@@ -1,6 +1,7 @@
 import 'package:algo_test/components/atoms/typography/header3.dart';
 import 'package:algo_test/components/atoms/typography/header4.dart';
 import 'package:algo_test/config/themes/assets/app_colors.dart';
+import 'package:algo_test/constants/app_strings.dart';
 import 'package:algo_test/constants/radius_constants.dart';
 import 'package:algo_test/constants/spacing_constants.dart';
 import 'package:algo_test/modules/home/blocs/home_bloc.dart';
@@ -106,25 +107,25 @@ class _HomePageState extends State<HomePage> {
             horizontal: kSpacingMedium,
           ),
           color: AppColors.secondaryColor,
-          child: const Row(
+          child: Row(
             children: [
               Expanded(
                 child: Header4(
-                  title: 'Call LTP',
+                  title: AppStrings.callLTP,
                   color: AppColors.greyTextColor,
                   textAlign: TextAlign.start,
                 ),
               ),
               Expanded(
                 child: Header4(
-                  title: 'Strike',
+                  title: AppStrings.strike,
                   color: AppColors.yellowColor,
                   textAlign: TextAlign.center,
                 ),
               ),
               Expanded(
                 child: Header4(
-                  title: 'Put LTP',
+                  title: AppStrings.putLTP,
                   color: AppColors.greyTextColor,
                   textAlign: TextAlign.end,
                 ),

@@ -13,4 +13,9 @@ class AppStrings {
   static String attemptingToReconnectIn = 'attemptingToReconnectIn'.tr();
   static String reconnectingAttemptFailed = 'reconnectingAttemptFailed'.tr();
   static String error = 'error'.tr();
+  static String callLTP = 'callLTP'.tr();
+  static String putLTP = 'putLTP'.tr();
+  static String strike = 'strike'.tr();
+  static String noDataFound = 'noDataFound'.tr();
+  static String noResultFound = 'noResultFound'.tr();
 }
