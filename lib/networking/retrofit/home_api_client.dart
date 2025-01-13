@@ -1,3 +1,4 @@
+import 'package:algo_test/modules/home/models/contracts_response.dart';
 import 'package:algo_test/modules/home/models/option_chain_response.dart';
 import 'package:algo_test/networking/constants/network_constants.dart';
 import 'package:algo_test/networking/models/app_dio.dart';
@@ -23,9 +24,8 @@ abstract class HomeApiClient {
     );
   }
 
-  // TODO(kapil): Update return type in follow UP PRs
   @GET('/contracts')
-  Future<dynamic> getContracts({
+  Future<ContractsResponse> getContracts({
     @Query('underlying') required String underlyingValue,
   });
 

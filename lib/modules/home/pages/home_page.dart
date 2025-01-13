@@ -27,6 +27,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _homeBloc.getOptionChainsWithLtp();
+    _homeBloc.getValidContracts();
   }
 
   @override

@@ -19,24 +19,25 @@ class _HomeApiClient implements HomeApiClient {
   String? baseUrl;
 
   @override
-  Future<dynamic> getContracts({required underlyingValue}) async {
+  Future<ContractsResponse> getContracts({required underlyingValue}) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{r'underlying': underlyingValue};
     final _headers = <String, dynamic>{};
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio.fetch(_setStreamType<dynamic>(Options(
+    final _result = await _dio
+        .fetch<Map<String, dynamic>>(_setStreamType<ContractsResponse>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
     )
-        .compose(
-          _dio.options,
-          '/contracts',
-          queryParameters: queryParameters,
-          data: _data,
-        )
-        .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
-    final value = _result.data;
+            .compose(
+              _dio.options,
+              '/contracts',
+              queryParameters: queryParameters,
+              data: _data,
+            )
+            .copyWith(baseUrl: baseUrl ?? _dio.options.baseUrl)));
+    final value = ContractsResponse.fromJson(_result.data!);
     return value;
   }
 
