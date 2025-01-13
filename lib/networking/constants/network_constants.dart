@@ -7,5 +7,7 @@ class NetworkConstants {
 
   static String devBaseUrl = 'https://prices.algotest.xyz';
 
+  static String mockServerUrl = 'https://prices.algotest.xyz';
+
   static final String baseUrl = FlavorConfig.instance!.values.baseUrl;
 }
