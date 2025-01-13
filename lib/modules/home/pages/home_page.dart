@@ -57,7 +57,7 @@ class _HomePageState extends State<HomePage> {
 
           return LoadingOverlay(
             isLoading: state is HomeInitial || state is HomeLoading,
-            child: state.optionsData != null
+            child: state.optionsData.isNotEmpty
                 ? Column(
                     children: [
                       SizedBox(
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
                         child: FilterListView(
                           expiryDates: state.expiryDates,
                           currentExpiryDate: state.currentExpiryDate,
-                          onTap: (newExpiry) {},
+                          onTap: _homeBloc.onFilterChange,
                         ),
                       ),
                       const SizedBox(
@@ -73,7 +73,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       const OptionChainListHeader(),
                       OptionChainListView(
-                        optionsData: state.optionsData!,
+                        optionsData: state.optionsData,
                         currentExpiryDate: state.currentExpiryDate,
                       ),
                     ],
