@@ -17,7 +17,7 @@ class LoadingOverlay extends StatelessWidget {
       return const Center(
         child: CircularProgressIndicator(
           valueColor: AlwaysStoppedAnimation<Color>(
-            AppColors.secondaryColor,
+            AppColors.yellowColor,
           ),
         ),
       );
