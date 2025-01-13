@@ -10,7 +10,7 @@ class OptionChainListView extends StatelessWidget {
     required this.currentExpiryDate,
   });
 
-  final OptionChainResponse optionsData;
+  final Map<String, OptionData> optionsData;
   final String currentExpiryDate;
 
   @override
@@ -18,9 +18,9 @@ class OptionChainListView extends StatelessWidget {
     return Expanded(
       child: ListView.separated(
         shrinkWrap: true,
-        itemCount: optionsData.options[currentExpiryDate]?.strike.length ?? 0,
+        itemCount: optionsData[currentExpiryDate]?.strike.length ?? 0,
         itemBuilder: (context, index) {
-          final strikeRow = optionsData.options[currentExpiryDate];
+          final strikeRow = optionsData[currentExpiryDate];
 
           return OptionChainListItem(
             optionData: strikeRow,

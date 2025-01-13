@@ -2,12 +2,12 @@ part of 'home_bloc.dart';
 
 abstract class HomeState extends Equatable {
   const HomeState({
-    this.optionsData,
+    this.optionsData = const {},
     this.expiryDates = const [],
     this.currentExpiryDate = '',
   });
 
-  final OptionChainResponse? optionsData;
+  final Map<String, OptionData> optionsData;
   final List<String> expiryDates;
   final String currentExpiryDate;
 
@@ -27,7 +27,7 @@ class HomeEmpty extends HomeState {}
 
 class HomeLoaded extends HomeState {
   const HomeLoaded({
-    required OptionChainResponse optionsData,
+    required Map<String, OptionData> optionsData,
     required List<String> expiryDates,
     required String currentExpiryDate,
     int? timeStamp,
@@ -41,7 +41,7 @@ class HomeLoaded extends HomeState {
 class HomeError extends HomeState {
   const HomeError({
     required this.errorMessage,
-    required OptionChainResponse optionsData,
+    required Map<String, OptionData> optionsData,
     required List<String> expiryDates,
     required String currentExpiryDate,
   }) : super(
