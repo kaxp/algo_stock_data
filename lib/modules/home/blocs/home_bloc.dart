@@ -31,7 +31,7 @@ class HomeBloc extends Cubit<HomeState> {
         final expiryDates = response.options.keys.toList();
 
         emit(HomeLoaded(
-          optionsData: response,
+          optionsData: response.options,
           expiryDates: expiryDates,
           currentExpiryDate: expiryDates.first,
         ));
@@ -41,10 +41,18 @@ class HomeBloc extends Cubit<HomeState> {
     } on DioException catch (error) {
       emit(HomeError(
         errorMessage: error.errorMessage(),
-        optionsData: state.optionsData!,
+        optionsData: state.optionsData,
         expiryDates: state.expiryDates,
         currentExpiryDate: state.currentExpiryDate,
       ));
     }
+  }
+
+  void onFilterChange(String expiry) {
+    emit(HomeLoaded(
+      optionsData: state.optionsData,
+      expiryDates: state.expiryDates,
+      currentExpiryDate: expiry,
+    ));
   }
 }
