@@ -5,61 +5,52 @@ import 'package:algo_test/constants/app_strings.dart';
 import 'package:algo_test/utils/log.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
-// TODO(kapil): Refactor the socket client types when integrating API
 class WebSocketClient<T> {
   WebSocketClient({this.fromJson});
 
   WebSocketChannel? _channel;
-  int _reconnectAttempts = 0;
-  final int _maxReconnectAttempts = 5;
-  final Duration _initialDelay = const Duration(seconds: 2);
-  late String url;
+  bool _isConnected = false;
+  String _url = '';
 
-  // Stream controller to emit raw messages received from the server
+  int _reconnectAttempts = 0;
+  final int _maxReconnectAttempts = 20;
+  final Duration _initialDelay = const Duration(seconds: 2);
+
+  /// Stream controller to emit raw messages received from the server
   final StreamController<T> _controller = StreamController<T>.broadcast();
 
-  // A deserialization function to convert raw JSON to T
+  /// A deserialization function to convert raw JSON to T
   final T Function(String)? fromJson;
 
+  /// Connect to the WebSocket server
   Future<void> connect({required String socketUrl}) async {
-    url = socketUrl;
+    _url = socketUrl;
+
     _channel = WebSocketChannel.connect(Uri.parse(socketUrl));
+
     listenForMessages();
+    Log.debug("WebSocket connecting to $socketUrl");
 
     // We can add Heartbeat/Ping-Pong Mechanism here if required
   }
 
+  /// Send a message through the WebSocket
   Future<void> sendMessage(Map<String, dynamic> message) async {
     if (_channel != null) {
       _channel!.sink.add(jsonEncode(message));
     }
   }
 
+  /// Listen for incoming messages and connection events
   void listenForMessages() {
-    _channel!.stream.listen(
-      (message) {
-        final data = fromJson!(message);
-        _controller.add(data);
-      },
+    _channel?.stream.listen(
+      (message) => _handleIncomingMessage(message),
       onError: _handleError,
       onDone: _handleClosed,
     );
   }
 
-  void _handleError(Object error) {
-    Log.error("${AppStrings.error}: $error");
-
-    // Start reconnection process on error
-    _reconnect();
-  }
-
-  void _handleClosed() {
-    Log.debug(AppStrings.webSocketClosed);
-
-    // Start reconnection process when WebSocket is closed
-    _reconnect();
-  }
-
+  /// Handle reconnection with exponential backoff
   Future<void> _reconnect() async {
     if (_reconnectAttempts >= _maxReconnectAttempts) {
       Log.error(AppStrings.maxReconnectionAttemptsReached);
@@ -67,32 +58,74 @@ class WebSocketClient<T> {
     }
 
     _reconnectAttempts++;
-
-    // Calculating delay with exponential backoff
     final delay = _initialDelay * pow(2, _reconnectAttempts - 1);
+    Log.warning("Attempting to reconnect in $delay...");
 
-    Log.warning("${AppStrings.attemptingToReconnectIn} $delay...");
     await Future.delayed(delay);
 
     try {
-      await connect(socketUrl: url);
-      Log.debug(AppStrings.reconnectionSuccessful);
-
-      // Reset attempts after successful reconnect
-      _reconnectAttempts = 0;
+      await connect(socketUrl: _url);
+      if (_isConnected) {
+        Log.debug(AppStrings.reconnectionSuccessful);
+        _reconnectAttempts = 0;
+      }
     } catch (e) {
-      Log.error("${AppStrings.reconnectingAttemptFailed}: $e");
-
-      // Retry reconnection if failed
+      Log.error("Reconnection attempt failed: $e");
       _reconnect();
     }
   }
 
+  /// Close the WebSocket
   Future<void> close() async {
     await _channel?.sink.close();
     await _controller.close();
   }
 
-  // Expose the stream to external classes
+  void _handleIncomingMessage(dynamic message) {
+    if (!_isConnected) {
+      _isConnected = true;
+      Log.debug("WebSocket connection established.");
+    }
+
+    try {
+      final data = fromJson!(message);
+      _controller.add(data);
+    } catch (e) {
+      Log.error("Failed to parse incoming message: $e");
+    }
+  }
+
+  void _handleError(Object error) {
+    _isConnected = false;
+    Log.error("WebSocket error: $error");
+
+    if (error is WebSocketChannelException &&
+        error.toString().contains('SocketException: Failed host lookup')) {
+      _emitErrorToStream(AppStrings.noInternetAvailable);
+    }
+
+    _reconnect();
+  }
+
+  void _handleClosed() {
+    _isConnected = false;
+    Log.debug(AppStrings.webSocketClosed);
+    _reconnect();
+  }
+
+  void _emitErrorToStream(String errorMessage) {
+    try {
+      final errorData = jsonEncode({"errorMessage": errorMessage});
+      final data = fromJson!(errorData);
+      _controller.add(data);
+    } catch (e) {
+      Log.error("Failed to emit error message to stream: $e");
+    }
+  }
+
+  /// Expose the message stream to external listeners
   Stream<T> get messageStream => _controller.stream;
+
+  /// Check WebSocket connection status
+  bool get isConnected => _isConnected;
 }
