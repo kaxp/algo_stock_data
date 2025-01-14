@@ -63,9 +63,11 @@ This application is developed on Flutter v3.19.6 in the Stable channel.
 
 # Project Setup:
 
+- Architecture Pattern- [Layered Architecture](https://www.sciencedirect.com/topics/computer-science/layered-architecture)
+- Design Pattern- [Atomic Design Pattern](https://atomicdesign.bradfrost.com/chapter-2/)
 - State-management- [flutter_bloc](https://pub.dev/packages/flutter_bloc)
-- Navigation - [flutter_modular](https://pub.dev/packages/flutter_modular)
 - Dependency Injection - [flutter_modular](https://pub.dev/packages/flutter_modular)
+- Navigation - [flutter_modular](https://pub.dev/packages/flutter_modular)
 - Localization - [easy_localization](https://pub.dev/packages/easy_localization)
 - Model classes - [json_serializable](https://pub.dev/packages/json_serializable) and [equatable](https://pub.dev/packages/equatable)
 - Unit And Widget testing - flutter_test, [modular_test](https://pub.dev/packages/modular_test)
