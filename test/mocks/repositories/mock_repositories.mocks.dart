@@ -8,6 +8,8 @@ import 'dart:async' as _i5;
 import 'package:algo_test/modules/home/models/contracts_response.dart' as _i2;
 import 'package:algo_test/modules/home/models/option_chain_response.dart'
     as _i3;
+import 'package:algo_test/modules/home/models/options_websocket_response.dart'
+    as _i6;
 import 'package:algo_test/modules/home/repositories/home_repo.dart' as _i4;
 import 'package:mockito/mockito.dart' as _i1;
 
@@ -50,6 +52,15 @@ class _FakeOptionChainResponse_1 extends _i1.SmartFake
 ///
 /// See the documentation for Mockito's code generation for more information.
 class MockHomeRepo extends _i1.Mock implements _i4.HomeRepo {
+  @override
+  _i5.Stream<_i6.OptionsWebSocketResponse?> get webSocketMessages =>
+      (super.noSuchMethod(
+        Invocation.getter(#webSocketMessages),
+        returnValue: _i5.Stream<_i6.OptionsWebSocketResponse?>.empty(),
+        returnValueForMissingStub:
+            _i5.Stream<_i6.OptionsWebSocketResponse?>.empty(),
+      ) as _i5.Stream<_i6.OptionsWebSocketResponse?>);
+
   @override
   _i5.Future<_i2.ContractsResponse> getContracts(
           {required String? underlyingValue}) =>
@@ -107,4 +118,36 @@ class MockHomeRepo extends _i1.Mock implements _i4.HomeRepo {
           ),
         )),
       ) as _i5.Future<_i3.OptionChainResponse>);
+
+  @override
+  _i5.Future<void> connectToOptionsWebSocket() => (super.noSuchMethod(
+        Invocation.method(
+          #connectToOptionsWebSocket,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> sendMessageToOptionsWebSocket(
+          Map<String, dynamic>? message) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #sendMessageToOptionsWebSocket,
+          [message],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> closeOptionsWebSocket() => (super.noSuchMethod(
+        Invocation.method(
+          #closeOptionsWebSocket,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }
