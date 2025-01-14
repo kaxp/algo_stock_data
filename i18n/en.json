@@ -15,5 +15,10 @@
   "strike": "Strike",
   "noDataFound": "Data transmission lost!\nCheck your internet connection and try again.",
   "noResultFound": "Looks like we're exploring uncharted territory! No results found. Try a new quest?",
-  "algoTest": "AlgoTest"
+  "algoTest": "AlgoTest",
+  "noInternetAvailable": "No Internet Connection!",
+  "webSocketConnectingTo": "WebSocket connecting to",
+  "webSocketConnectionEstablished": "WebSocket connection established.",
+  "failedToParseMessage": "Failed to parse incoming message:",
+  "webSocketError": "WebSocket error:"
 }

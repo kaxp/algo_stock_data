@@ -6,9 +6,13 @@ part 'options_websocket_response.g.dart';
 // API that is required for this task.
 @JsonSerializable()
 class OptionsWebSocketResponse {
-  const OptionsWebSocketResponse({required this.ltp});
+  const OptionsWebSocketResponse({
+    required this.ltp,
+    required this.errorMessage,
+  });
 
   final List<LtpSocketData>? ltp;
+  final String? errorMessage;
 
   factory OptionsWebSocketResponse.fromJson(Map<String, dynamic> json) =>
       _$OptionsWebSocketResponseFromJson(json);

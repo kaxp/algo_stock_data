@@ -12,12 +12,14 @@ OptionsWebSocketResponse _$OptionsWebSocketResponseFromJson(
       ltp: (json['ltp'] as List<dynamic>?)
           ?.map((e) => LtpSocketData.fromJson(e as Map<String, dynamic>))
           .toList(),
+      errorMessage: json['errorMessage'] as String?,
     );
 
 Map<String, dynamic> _$OptionsWebSocketResponseToJson(
         OptionsWebSocketResponse instance) =>
     <String, dynamic>{
       'ltp': instance.ltp,
+      'errorMessage': instance.errorMessage,
     };
 
 LtpSocketData _$LtpSocketDataFromJson(Map<String, dynamic> json) =>

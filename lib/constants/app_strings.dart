@@ -19,4 +19,10 @@ class AppStrings {
   static String noDataFound = 'noDataFound'.tr();
   static String noResultFound = 'noResultFound'.tr();
   static String algoTest = 'algoTest'.tr();
+  static String noInternetAvailable = 'noInternetAvailable'.tr();
+  static String webSocketConnectingTo = 'webSocketConnectingTo'.tr();
+  static String webSocketConnectionEstablished =
+      'webSocketConnectionEstablished'.tr();
+  static String failedToParseMessage = 'failedToParseMessage'.tr();
+  static String webSocketError = 'webSocketError'.tr();
 }
