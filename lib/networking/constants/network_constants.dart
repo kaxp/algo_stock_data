@@ -9,5 +9,7 @@ class NetworkConstants {
 
   static String mockServerUrl = 'https://prices.algotest.xyz';
 
+  static String optionsWebSocketUrl = 'wss://prices.algotest.xyz/mock/updates';
+
   static final String baseUrl = FlavorConfig.instance!.values.baseUrl;
 }
