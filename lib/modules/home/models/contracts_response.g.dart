@@ -39,6 +39,7 @@ ContractOptionData _$ContractOptionDataFromJson(Map<String, dynamic> json) =>
     ContractOptionData(
       token: json['token'] as String,
       expiry: json['expiry'] as String,
+      strike: (json['strike'] as num).toDouble(),
       optionType: json['option_type'] as String,
     );
 
@@ -46,5 +47,6 @@ Map<String, dynamic> _$ContractOptionDataToJson(ContractOptionData instance) =>
     <String, dynamic>{
       'token': instance.token,
       'expiry': instance.expiry,
+      'strike': instance.strike,
       'option_type': instance.optionType,
     };
