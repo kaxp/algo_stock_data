@@ -28,20 +28,24 @@ Map<String, dynamic> _$OptionChainResponseToJson(
     };
 
 OptionData _$OptionDataFromJson(Map<String, dynamic> json) => OptionData(
-      strike: (json['strike'] as List<dynamic>)
-          .map((e) => (e as num).toDouble())
-          .toList(),
-      callClose: (json['call_close'] as List<dynamic>?)
-          ?.map((e) => (e as num?)?.toDouble())
-          .toList(),
-      putClose: (json['put_close'] as List<dynamic>?)
-          ?.map((e) => (e as num?)?.toDouble())
+      options: (json['options'] as List<dynamic>)
+          .map((e) => Option.fromJson(e as Map<String, dynamic>))
           .toList(),
     );
 
 Map<String, dynamic> _$OptionDataToJson(OptionData instance) =>
     <String, dynamic>{
+      'options': instance.options.map((e) => e.toJson()).toList(),
+    };
+
+Option _$OptionFromJson(Map<String, dynamic> json) => Option(
+      strike: (json['strike'] as num).toDouble(),
+      callClose: (json['callClose'] as num?)?.toDouble(),
+      putClose: (json['putClose'] as num?)?.toDouble(),
+    );
+
+Map<String, dynamic> _$OptionToJson(Option instance) => <String, dynamic>{
       'strike': instance.strike,
-      'call_close': instance.callClose,
-      'put_close': instance.putClose,
+      'callClose': instance.callClose,
+      'putClose': instance.putClose,
     };
