@@ -81,6 +81,8 @@ This application is developed on Flutter v3.19.6 in the Stable channel.
 4. run `flutter pub run build_runner build`
 5. run the application on Android device
    - `flutter run --release`
+6. running the unit and widget tests
+   - `flutter test`
 
 ### Screenshots
 
