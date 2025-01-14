@@ -117,9 +117,9 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as _i5.Future<void>);
 
   @override
-  _i5.Future<void> connectToWebSocket() => (super.noSuchMethod(
+  _i5.Future<void> connectToOptionsWebSocket() => (super.noSuchMethod(
         Invocation.method(
-          #connectToWebSocket,
+          #connectToOptionsWebSocket,
           [],
         ),
         returnValue: _i5.Future<void>.value(),
@@ -127,10 +127,11 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as _i5.Future<void>);
 
   @override
-  _i5.Future<void> sendMessageToWebSocket(Map<String, dynamic>? message) =>
+  _i5.Future<void> sendMessageToOptionsWebSocket(
+          Map<String, dynamic>? message) =>
       (super.noSuchMethod(
         Invocation.method(
-          #sendMessageToWebSocket,
+          #sendMessageToOptionsWebSocket,
           [message],
         ),
         returnValue: _i5.Future<void>.value(),
@@ -138,9 +139,9 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as _i5.Future<void>);
 
   @override
-  _i5.Future<void> closeWebSocket() => (super.noSuchMethod(
+  _i5.Future<void> closeOptionsWebSocket() => (super.noSuchMethod(
         Invocation.method(
-          #closeWebSocket,
+          #closeOptionsWebSocket,
           [],
         ),
         returnValue: _i5.Future<void>.value(),
