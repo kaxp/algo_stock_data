@@ -29,12 +29,11 @@ class HomeBloc extends Cubit<HomeState> {
 
   /// [getValidContracts] fetches all the valid contracts
   /// for specified underlying value(e.g. 'BANKNIFTY) and
-  /// populates the `validTokenCache` for quick token lookups.
-  ///
-  /// It's an background API call which will not affect the
-  /// UI/UX of our app.
+  /// populates the [validTokenCache] for quick token lookups.
   Future<void> getValidContracts() async {
     try {
+      emit(HomeLoading());
+
       final response = await _homeRepo.getContracts(
         underlyingValue: underlyingValue,
       );
@@ -45,6 +44,7 @@ class HomeBloc extends Cubit<HomeState> {
       } else {
         // TODO(kapil): Handle empty state
       }
+      getOptionChainsWithLtp();
     } on DioException catch (error) {
       Log.error(error.errorMessage());
       // TODO(kapil): Handle error state
@@ -55,7 +55,9 @@ class HomeBloc extends Cubit<HomeState> {
   /// with TLP for specified underlying value
   Future<void> getOptionChainsWithLtp() async {
     try {
-      emit(HomeLoading());
+      if (state is! HomeLoading) {
+        emit(HomeLoading());
+      }
 
       final response = await _homeRepo.getOptionChains(
         underlyingValue: underlyingValue,
@@ -70,7 +72,7 @@ class HomeBloc extends Cubit<HomeState> {
           currentExpiryDate: expiryDates.first,
         ));
 
-        connectToOptionsWebSocket();
+        _connectToOptionsWebSocket();
       } else {
         emit(HomeEmpty());
       }
@@ -84,9 +86,21 @@ class HomeBloc extends Cubit<HomeState> {
     }
   }
 
-  // TODO(kapil): Handle error states for the socket
-  // Connect to WebSocket and listen for messages
-  Future<void> connectToOptionsWebSocket() async {
+  /// Establishes a WebSocket connection and processes live LTP data.
+  ///
+  /// This method performs the following steps:
+  /// 1. Subscribes to the WebSocket with the required parameters, including the current expiry date.
+  /// 2. Listens for incoming messages containing a list of LTP data.
+  /// 3. For each LTP item:
+  ///     a. Checks if the token exists in the [validTokenCache], allowing O(1) lookups for associated contract data.
+  ///     b. If a matching token is found, identifies the corresponding option from the current expiry's option chain.
+  ///     c. Updates the `putClose` or `callClose` value for the matched option based on the option type (`PE` or `CE`).
+  /// 4. Emits a new state with updated options data using `copyWith`, ensuring immutability and triggering UI updates.
+  ///
+  /// Notes:
+  /// - The [validTokenCache] is a precomputed map linking tokens to their contract data.
+  /// - Each update creates a new instance of `HomeLoaded` to maintain state consistency and signal UI changes.
+  Future<void> _connectToOptionsWebSocket() async {
     try {
       await _homeRepo.connectToOptionsWebSocket();
 
@@ -109,10 +123,56 @@ class HomeBloc extends Cubit<HomeState> {
       _homeRepo.webSocketMessages.listen(
         (message) {
           if (message?.ltp != null) {
-            // TODO(kapil): Process the data and emit state
-            // emit(HomeOptionsSocketMessageReceived(socketMessage: message));
+            message?.ltp?.forEach((ltpMessage) {
+              final token = ltpMessage.token;
+
+              // Check if the token exists in the validTokenCache
+              if (validTokenCache.containsKey(token)) {
+                final contractOptionData = validTokenCache[token];
+
+                if (contractOptionData != null) {
+                  // Find the matching option based on the strike value
+                  final matchingOption = state
+                      .optionsData[state.currentExpiryDate]?.options
+                      .firstWhere(
+                    (option) => option.strike == contractOptionData.strike,
+                    orElse: () => Option(strike: 0.0),
+                  );
+
+                  if (matchingOption != null) {
+                    // Update the option's put or call value
+                    if (contractOptionData.optionType == "PE") {
+                      matchingOption.putClose = ltpMessage.ltp;
+                    } else {
+                      matchingOption.callClose = ltpMessage.ltp;
+                    }
+
+                    // Update the state with the modified options data
+                    final updatedOptionsData =
+                        Map<String, OptionData>.from(state.optionsData);
+
+                    final updatedOptionsList = List<Option>.from(
+                        updatedOptionsData[state.currentExpiryDate]?.options ??
+                            []);
+                    final index = updatedOptionsList.indexOf(matchingOption);
+
+                    // Check if the matching option exists in the updatedOptionsList
+                    // index == -1, when matchingOption is not found in the updatedOptionsList
+                    if (index != -1) {
+                      updatedOptionsList[index] = matchingOption;
+                      updatedOptionsData[state.currentExpiryDate] =
+                          OptionData(options: updatedOptionsList);
+                    }
+
+                    emit((state as HomeLoaded).copyWith(
+                      optionsData: updatedOptionsData,
+                    ));
+                  }
+                }
+              }
+            });
           } else if (message?.errorMessage != null) {
-            // TODO(kapil): Emit socket error state
+            // TODO: Handle WebSocket error messages
           } else {
             sendMessageToOptionsWebSocket(socketMessage);
           }
