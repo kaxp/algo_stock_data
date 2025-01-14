@@ -29,7 +29,7 @@ class WebSocketClient<T> {
     _channel = WebSocketChannel.connect(Uri.parse(socketUrl));
 
     listenForMessages();
-    Log.debug("WebSocket connecting to $socketUrl");
+    Log.debug("${AppStrings.webSocketConnectingTo} $socketUrl");
 
     // We can add Heartbeat/Ping-Pong Mechanism here if required
   }
@@ -59,7 +59,7 @@ class WebSocketClient<T> {
 
     _reconnectAttempts++;
     final delay = _initialDelay * pow(2, _reconnectAttempts - 1);
-    Log.warning("Attempting to reconnect in $delay...");
+    Log.warning("${AppStrings.attemptingToReconnectIn} $delay...");
 
     await Future.delayed(delay);
 
@@ -70,7 +70,7 @@ class WebSocketClient<T> {
         _reconnectAttempts = 0;
       }
     } catch (e) {
-      Log.error("Reconnection attempt failed: $e");
+      Log.error("${AppStrings.reconnectingAttemptFailed}: $e");
       _reconnect();
     }
   }
@@ -84,24 +84,27 @@ class WebSocketClient<T> {
   void _handleIncomingMessage(dynamic message) {
     if (!_isConnected) {
       _isConnected = true;
-      Log.debug("WebSocket connection established.");
+      Log.debug(AppStrings.webSocketConnectionEstablished);
     }
 
     try {
       final data = fromJson!(message);
       _controller.add(data);
     } catch (e) {
-      Log.error("Failed to parse incoming message: $e");
+      Log.error("${AppStrings.failedToParseMessage} $e");
     }
   }
 
   void _handleError(Object error) {
     _isConnected = false;
-    Log.error("WebSocket error: $error");
+    Log.error("${AppStrings.webSocketError} $error");
 
     if (error is WebSocketChannelException &&
         error.toString().contains('SocketException: Failed host lookup')) {
-      _emitErrorToStream(AppStrings.noInternetAvailable);
+      final errorData =
+          jsonEncode({"errorMessage": AppStrings.noInternetAvailable});
+      final data = fromJson!(errorData);
+      _controller.add(data);
     }
 
     _reconnect();
@@ -111,16 +114,6 @@ class WebSocketClient<T> {
     _isConnected = false;
     Log.debug(AppStrings.webSocketClosed);
     _reconnect();
-  }
-
-  void _emitErrorToStream(String errorMessage) {
-    try {
-      final errorData = jsonEncode({"errorMessage": errorMessage});
-      final data = fromJson!(errorData);
-      _controller.add(data);
-    } catch (e) {
-      Log.error("Failed to emit error message to stream: $e");
-    }
   }
 
   /// Expose the message stream to external listeners
