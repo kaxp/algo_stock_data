@@ -1,9 +1,7 @@
 import 'package:algo_test/modules/home/models/contracts_response.dart';
 import 'package:algo_test/modules/home/models/option_chain_response.dart';
-import 'package:algo_test/modules/home/models/options_websocket_response.dart';
 import 'package:algo_test/modules/home/repositories/home_repo.dart';
 import 'package:algo_test/utils/dio_error_extension.dart';
-import 'package:algo_test/utils/log.dart';
 import 'package:dio/dio.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,13 +39,16 @@ class HomeBloc extends Cubit<HomeState> {
       if (response.contracts.contractOptions.isNotEmpty) {
         // Extract and store the cache only
         validTokenCache = response.tokenCache;
-      } else {
-        // TODO(kapil): Handle empty state
       }
+
       getOptionChainsWithLtp();
     } on DioException catch (error) {
-      Log.error(error.errorMessage());
-      // TODO(kapil): Handle error state
+      emit(HomeError(
+        errorMessage: error.errorMessage(),
+        optionsData: state.optionsData,
+        expiryDates: state.expiryDates,
+        currentExpiryDate: state.currentExpiryDate,
+      ));
     }
   }
 
@@ -72,7 +73,9 @@ class HomeBloc extends Cubit<HomeState> {
           currentExpiryDate: expiryDates.first,
         ));
 
-        _connectToOptionsWebSocket();
+        if (validTokenCache.isNotEmpty) {
+          connectToOptionsWebSocket();
+        }
       } else {
         emit(HomeEmpty());
       }
@@ -100,7 +103,7 @@ class HomeBloc extends Cubit<HomeState> {
   /// Notes:
   /// - The [validTokenCache] is a precomputed map linking tokens to their contract data.
   /// - Each update creates a new instance of `HomeLoaded` to maintain state consistency and signal UI changes.
-  Future<void> _connectToOptionsWebSocket() async {
+  Future<void> connectToOptionsWebSocket() async {
     try {
       await _homeRepo.connectToOptionsWebSocket();
 
@@ -164,23 +167,34 @@ class HomeBloc extends Cubit<HomeState> {
                           OptionData(options: updatedOptionsList);
                     }
 
-                    emit((state as HomeLoaded).copyWith(
+                    emit(HomeLoaded(
                       optionsData: updatedOptionsData,
+                      expiryDates: state.expiryDates,
+                      currentExpiryDate: state.currentExpiryDate,
                     ));
                   }
                 }
               }
             });
           } else if (message?.errorMessage != null) {
-            // TODO: Handle WebSocket error messages
+            emit(HomeOptionsSocketError(
+              errorMessage: message?.errorMessage ?? '',
+              optionsData: state.optionsData,
+              expiryDates: state.expiryDates,
+              currentExpiryDate: state.currentExpiryDate,
+            ));
           } else {
             sendMessageToOptionsWebSocket(socketMessage);
           }
         },
       );
     } catch (e) {
-      Log.error("Error connecting to WebSocket: $e");
-      // emit(HomeError("Failed to connect to WebSocket: $e"));
+      emit(HomeOptionsSocketError(
+        errorMessage: 'Failed to connect to WebSocket: $e',
+        optionsData: state.optionsData,
+        expiryDates: state.expiryDates,
+        currentExpiryDate: state.currentExpiryDate,
+      ));
     }
   }
 
@@ -190,8 +204,12 @@ class HomeBloc extends Cubit<HomeState> {
     try {
       await _homeRepo.sendMessageToOptionsWebSocket(message);
     } catch (e) {
-      Log.error("Error sending WebSocket message: $e");
-      // emit(HomeError("Failed to send message: $e"));
+      emit(HomeOptionsSocketError(
+        errorMessage: 'Error sending WebSocket message: $e',
+        optionsData: state.optionsData,
+        expiryDates: state.expiryDates,
+        currentExpiryDate: state.currentExpiryDate,
+      ));
     }
   }
 
