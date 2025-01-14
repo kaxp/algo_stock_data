@@ -3,10 +3,11 @@
 // Do not manually edit this file.
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:async' as _i4;
+import 'dart:async' as _i5;
 
 import 'package:algo_test/modules/home/blocs/home_bloc.dart' as _i2;
-import 'package:flutter_bloc/flutter_bloc.dart' as _i5;
+import 'package:algo_test/modules/home/models/contracts_response.dart' as _i4;
+import 'package:flutter_bloc/flutter_bloc.dart' as _i6;
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:mockito/src/dummies.dart' as _i3;
 
@@ -51,6 +52,24 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as String);
 
   @override
+  Map<String, _i4.ContractOptionData> get validTokenCache =>
+      (super.noSuchMethod(
+        Invocation.getter(#validTokenCache),
+        returnValue: <String, _i4.ContractOptionData>{},
+        returnValueForMissingStub: <String, _i4.ContractOptionData>{},
+      ) as Map<String, _i4.ContractOptionData>);
+
+  @override
+  set validTokenCache(Map<String, _i4.ContractOptionData>? _validTokenCache) =>
+      super.noSuchMethod(
+        Invocation.setter(
+          #validTokenCache,
+          _validTokenCache,
+        ),
+        returnValueForMissingStub: null,
+      );
+
+  @override
   _i2.HomeState get state => (super.noSuchMethod(
         Invocation.getter(#state),
         returnValue: _FakeHomeState_0(
@@ -64,11 +83,11 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as _i2.HomeState);
 
   @override
-  _i4.Stream<_i2.HomeState> get stream => (super.noSuchMethod(
+  _i5.Stream<_i2.HomeState> get stream => (super.noSuchMethod(
         Invocation.getter(#stream),
-        returnValue: _i4.Stream<_i2.HomeState>.empty(),
-        returnValueForMissingStub: _i4.Stream<_i2.HomeState>.empty(),
-      ) as _i4.Stream<_i2.HomeState>);
+        returnValue: _i5.Stream<_i2.HomeState>.empty(),
+        returnValueForMissingStub: _i5.Stream<_i2.HomeState>.empty(),
+      ) as _i5.Stream<_i2.HomeState>);
 
   @override
   bool get isClosed => (super.noSuchMethod(
@@ -78,24 +97,56 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       ) as bool);
 
   @override
-  _i4.Future<void> getValidContracts() => (super.noSuchMethod(
+  _i5.Future<void> getValidContracts() => (super.noSuchMethod(
         Invocation.method(
           #getValidContracts,
           [],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
-  _i4.Future<void> getOptionChainsWithLtp() => (super.noSuchMethod(
+  _i5.Future<void> getOptionChainsWithLtp() => (super.noSuchMethod(
         Invocation.method(
           #getOptionChainsWithLtp,
           [],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> connectToOptionsWebSocket() => (super.noSuchMethod(
+        Invocation.method(
+          #connectToOptionsWebSocket,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> sendMessageToOptionsWebSocket(
+          Map<String, dynamic>? message) =>
+      (super.noSuchMethod(
+        Invocation.method(
+          #sendMessageToOptionsWebSocket,
+          [message],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
+
+  @override
+  _i5.Future<void> closeOptionsWebSocket() => (super.noSuchMethod(
+        Invocation.method(
+          #closeOptionsWebSocket,
+          [],
+        ),
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 
   @override
   void onFilterChange(String? expiry) => super.noSuchMethod(
@@ -116,7 +167,7 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       );
 
   @override
-  void onChange(_i5.Change<_i2.HomeState>? change) => super.noSuchMethod(
+  void onChange(_i6.Change<_i2.HomeState>? change) => super.noSuchMethod(
         Invocation.method(
           #onChange,
           [change],
@@ -157,12 +208,12 @@ class MockHomeBloc extends _i1.Mock implements _i2.HomeBloc {
       );
 
   @override
-  _i4.Future<void> close() => (super.noSuchMethod(
+  _i5.Future<void> close() => (super.noSuchMethod(
         Invocation.method(
           #close,
           [],
         ),
-        returnValue: _i4.Future<void>.value(),
-        returnValueForMissingStub: _i4.Future<void>.value(),
-      ) as _i4.Future<void>);
+        returnValue: _i5.Future<void>.value(),
+        returnValueForMissingStub: _i5.Future<void>.value(),
+      ) as _i5.Future<void>);
 }

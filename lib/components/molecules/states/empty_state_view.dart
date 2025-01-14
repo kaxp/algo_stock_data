@@ -10,20 +10,25 @@ class EmptyStateView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          AppImages.icDataNotFound(),
-          const SizedBox(
-            height: kSpacingSmall,
-          ),
-          Header2(
-            textAlign: TextAlign.center,
-            title: AppStrings.noResultFound,
-            color: AppColors.blackColor,
-          ),
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        horizontal: kSpacingMedium,
+      ),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            AppImages.icDataNotFound(),
+            const SizedBox(
+              height: kSpacingSmall,
+            ),
+            Header2(
+              textAlign: TextAlign.center,
+              title: AppStrings.noResultFound,
+              color: AppColors.white,
+            ),
+          ],
+        ),
       ),
     );
   }

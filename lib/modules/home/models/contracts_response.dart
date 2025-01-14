@@ -25,19 +25,11 @@ class ContractsResponse {
   ///
   /// Example cache object:
   ///
-  /// 'NSE_36794': {
-  ///   "token": "NSE_36794",
-  ///   "symbol": "BANKNIFTY25FEB42000PE",
-  ///   "lot_size": 30,
-  ///   "tick_size": 5,
-  ///   "max_qty_in_order": 900,
+  /// 'NSE_36774': {
+  ///   "token": "NSE_36774",
   ///   "expiry": "2025-02-27",
   ///   "strike": 42000.0,
-  ///   "underlying": "BANKNIFTY",
-  ///   "instrument_type": "OPT",
   ///   "option_type": "PE",
-  ///   "exchange": "NSE",
-  ///   "is_tradable": true
   /// }
   Map<String, ContractOptionData> _buildTokenCache() {
     final Map<String, ContractOptionData> cache = {};
@@ -70,11 +62,13 @@ class ContractOptionData {
   const ContractOptionData({
     required this.token,
     required this.expiry,
+    required this.strike,
     required this.optionType,
   });
 
   final String token;
   final String expiry;
+  final double strike;
 
   /// [optionType] is the value that indicates type of
   /// option (i.e, PE or CE)

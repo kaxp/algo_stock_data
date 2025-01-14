@@ -7,6 +7,8 @@ import 'package:web_socket_channel/web_socket_channel.dart';
 
 // TODO(kapil): Refactor the socket client types when integrating API
 class WebSocketClient<T> {
+  WebSocketClient({this.fromJson});
+
   WebSocketChannel? _channel;
   int _reconnectAttempts = 0;
   final int _maxReconnectAttempts = 5;
@@ -15,6 +17,9 @@ class WebSocketClient<T> {
 
   // Stream controller to emit raw messages received from the server
   final StreamController<T> _controller = StreamController<T>.broadcast();
+
+  // A deserialization function to convert raw JSON to T
+  final T Function(String)? fromJson;
 
   Future<void> connect({required String socketUrl}) async {
     url = socketUrl;
@@ -33,7 +38,8 @@ class WebSocketClient<T> {
   void listenForMessages() {
     _channel!.stream.listen(
       (message) {
-        _controller.add(message);
+        final data = fromJson!(message);
+        _controller.add(data);
       },
       onError: _handleError,
       onDone: _handleClosed,

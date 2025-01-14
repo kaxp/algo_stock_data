@@ -55,3 +55,11 @@ class HomeError extends HomeState {
   @override
   List<Object?> get props => [errorMessage];
 }
+
+class HomeOptionsSocketMessageReceived extends HomeState {
+  const HomeOptionsSocketMessageReceived({
+    required this.socketMessage,
+  });
+
+  final OptionsWebSocketResponse? socketMessage;
+}
