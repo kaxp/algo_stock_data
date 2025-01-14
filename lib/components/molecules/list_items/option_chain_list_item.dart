@@ -7,20 +7,20 @@ import 'package:flutter/material.dart';
 class OptionChainListItem extends StatelessWidget {
   const OptionChainListItem({
     Key? key,
-    required this.optionData,
+    required this.option,
     required this.keyValue,
     required this.index,
   }) : super(key: key);
 
-  final OptionData? optionData;
+  final Option option;
   final double? keyValue;
   final int index;
 
   @override
   Widget build(BuildContext context) {
-    final callValue = optionData?.callClose?[index]?.toStringAsFixed(2) ?? '--';
-    final strikeValue = optionData?.strike[index].toStringAsFixed(2) ?? '--';
-    final putValue = optionData?.putClose?[index]?.toStringAsFixed(2) ?? '--';
+    final callValue = option.callClose?.toStringAsFixed(2) ?? '--';
+    final strikeValue = option.strike.toStringAsFixed(2);
+    final putValue = option.putClose?.toStringAsFixed(2) ?? '--';
 
     return Container(
       padding: const EdgeInsets.symmetric(
