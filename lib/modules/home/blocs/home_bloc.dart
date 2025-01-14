@@ -111,14 +111,11 @@ class HomeBloc extends Cubit<HomeState> {
           if (message?.ltp != null) {
             // TODO(kapil): Process the data and emit state
             // emit(HomeOptionsSocketMessageReceived(socketMessage: message));
+          } else if (message?.errorMessage != null) {
+            // TODO(kapil): Emit socket error state
+          } else {
+            sendMessageToOptionsWebSocket(socketMessage);
           }
-        },
-        onError: (error) {
-          Log.error("WebSocket Error: $error");
-          // emit(HomeError("WebSocket Error: $error"));
-        },
-        onDone: () {
-          Log.debug("WebSocket connection closed");
         },
       );
     } catch (e) {
@@ -143,7 +140,22 @@ class HomeBloc extends Cubit<HomeState> {
     await _homeRepo.closeOptionsWebSocket();
   }
 
-  void onFilterChange(String expiry) {
+  void onFilterChange(String expiry) async {
+    final socketMessage = {
+      "msg": {
+        "type": "subscribe",
+        "datatypes": ["ltp"],
+        "underlyings": [
+          {
+            "underlying": "BANKNIFTY",
+            "cash": true,
+            "options": [(expiry)]
+          }
+        ]
+      }
+    };
+    await sendMessageToOptionsWebSocket(socketMessage);
+
     emit(HomeLoaded(
       optionsData: state.optionsData,
       expiryDates: state.expiryDates,
