@@ -1,0 +1,158 @@
+import 'package:algo_test/config/flavor_config.dart';
+import 'package:algo_test/modules/home/home_module.dart';
+import 'package:algo_test/modules/home/models/option_chain_response.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:mockito/mockito.dart';
+import 'package:modular_test/modular_test.dart';
+
+import 'package:algo_test/modules/home/blocs/home_bloc.dart';
+import 'package:algo_test/modules/home/pages/home_page.dart';
+import 'package:algo_test/components/molecules/app_bar/custom_appbar.dart';
+import 'package:algo_test/components/molecules/loading_overlay/loading_overlay.dart';
+import 'package:algo_test/components/molecules/states/empty_state_view.dart';
+import 'package:algo_test/components/molecules/states/error_state_view.dart';
+import 'package:algo_test/components/organisms/list_views/option_chain_list_view.dart';
+import 'package:algo_test/constants/app_strings.dart';
+
+import '../../../mocks/bloc/mock_blocs.mocks.dart';
+
+void main() {
+  late MockHomeBloc _mockHomeBloc;
+
+  setUpAll(() async {
+    FlavorConfig(
+      flavor: Flavor.mock,
+      values: const FlavorValues(
+        baseUrl: '',
+      ),
+    );
+    _mockHomeBloc = MockHomeBloc();
+  });
+
+  setUp(() async {
+    initModule(HomeModule(), replaceBinds: [
+      Bind<HomeBloc>((_) => _mockHomeBloc),
+    ]);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeInitial
+    Then HomePage is rendered with loading overlay''', (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => HomeInitial());
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byType(CustomAppBar), findsOneWidget);
+    expect(find.byType(LoadingOverlay), findsOneWidget);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeEmpty
+    Then HomePage is rendered with empty state view''', (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => HomeEmpty());
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CustomAppBar), findsOneWidget);
+    expect(find.byType(EmptyStateView), findsOneWidget);
+    expect(find.text(AppStrings.noResultFound), findsOneWidget);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeError
+    Then HomePage shows error state view''', (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => const HomeError(
+          errorMessage: 'An error occurred',
+          optionsData: {},
+          expiryDates: [],
+          currentExpiryDate: '',
+        ));
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CustomAppBar), findsOneWidget);
+    expect(find.byType(ErrorStateView), findsOneWidget);
+    // expect(find.text('An error occurred'), findsOneWidget);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeLoaded
+    Then HomePage shows the option chain list view''', (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => const HomeLoaded(
+          optionsData: {'expiryDate': OptionData(options: [])},
+          expiryDates: ['expiryDate'],
+          currentExpiryDate: 'expiryDate',
+        ));
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CustomAppBar), findsOneWidget);
+    expect(find.byType(OptionChainListView), findsOneWidget);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeLoading
+    Then HomePage shows loading overlay''', (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => HomeLoading());
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pump();
+
+    expect(find.byType(LoadingOverlay), findsOneWidget);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeError
+    Then HomePage shows snackbar with error message''', (tester) async {
+    // Mocking the HomeError state
+    when(_mockHomeBloc.state).thenAnswer((_) => const HomeError(
+          errorMessage: 'An error occurred',
+          optionsData: {},
+          expiryDates: [],
+          currentExpiryDate: '',
+        ));
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Verify that the snackbar is shown with the correct error message
+    expect(find.byType(SnackBar), findsOneWidget);
+    expect(find.text('An error occurred'), findsOneWidget);
+  });
+}
