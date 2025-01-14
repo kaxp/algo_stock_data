@@ -34,7 +34,6 @@ class RequestInterceptor extends QueuedInterceptor {
     DioException err,
     ErrorInterceptorHandler handler,
   ) async {
-    // TODO(kapil): Add API error handling
     if (err.response?.statusCode == HttpStatus.forbidden) {
       // We can handle the UI/UX flow here on API error
       return handler.next(
