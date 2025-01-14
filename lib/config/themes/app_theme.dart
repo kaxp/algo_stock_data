@@ -80,7 +80,7 @@ mixin AppTheme {
       height: 56,
     ),
     snackBarTheme: const SnackBarThemeData(
-      backgroundColor: Colors.black,
+      backgroundColor: AppColors.redColor,
     ),
   );
 }

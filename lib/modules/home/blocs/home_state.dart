@@ -17,27 +17,6 @@ abstract class HomeState extends Equatable {
         expiryDates,
         currentExpiryDate,
       ];
-
-  /// Creates a copy of the `HomeLoaded` state with updated values.
-  ///
-  /// This method is used to ensure immutability when updating the state.
-  /// It allows partial updates by specifying only the properties that need
-  /// to change while retaining the rest of the state.
-  ///
-  /// This updates only the `optionsData` field, leaving `expiryDates`
-  /// and `currentExpiryDate` unchanged as socket data only change the
-  /// optionData.
-  HomeLoaded copyWith({
-    Map<String, OptionData>? optionsData,
-    List<String>? expiryDates,
-    String? currentExpiryDate,
-  }) {
-    return HomeLoaded(
-      optionsData: optionsData ?? this.optionsData,
-      expiryDates: expiryDates ?? this.expiryDates,
-      currentExpiryDate: currentExpiryDate ?? this.currentExpiryDate,
-    );
-  }
 }
 
 class HomeInitial extends HomeState {}
@@ -77,10 +56,20 @@ class HomeError extends HomeState {
   List<Object?> get props => [errorMessage];
 }
 
-class HomeOptionsSocketMessageReceived extends HomeState {
-  const HomeOptionsSocketMessageReceived({
-    required this.socketMessage,
-  });
+class HomeOptionsSocketError extends HomeState {
+  const HomeOptionsSocketError({
+    required this.errorMessage,
+    required Map<String, OptionData> optionsData,
+    required List<String> expiryDates,
+    required String currentExpiryDate,
+  }) : super(
+          optionsData: optionsData,
+          expiryDates: expiryDates,
+          currentExpiryDate: currentExpiryDate,
+        );
 
-  final OptionsWebSocketResponse? socketMessage;
+  final String errorMessage;
+
+  @override
+  List<Object?> get props => [errorMessage];
 }

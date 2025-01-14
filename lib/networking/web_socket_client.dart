@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:math';
 import 'package:algo_test/constants/app_strings.dart';
 import 'package:algo_test/utils/log.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
@@ -12,9 +11,7 @@ class WebSocketClient<T> {
   bool _isConnected = false;
   String _url = '';
 
-  int _reconnectAttempts = 0;
-  final int _maxReconnectAttempts = 20;
-  final Duration _initialDelay = const Duration(seconds: 2);
+  bool _isReconnecting = false;
 
   /// Stream controller to emit raw messages received from the server
   final StreamController<T> _controller = StreamController<T>.broadcast();
@@ -50,15 +47,12 @@ class WebSocketClient<T> {
     );
   }
 
-  /// Handle reconnection with exponential backoff
+  /// Handle reconnection with 5 second delay
   Future<void> _reconnect() async {
-    if (_reconnectAttempts >= _maxReconnectAttempts) {
-      Log.error(AppStrings.maxReconnectionAttemptsReached);
-      return;
-    }
+    if (_isReconnecting) return;
+    _isReconnecting = true;
 
-    _reconnectAttempts++;
-    final delay = _initialDelay * pow(2, _reconnectAttempts - 1);
+    const delay = Duration(seconds: 5);
     Log.warning("${AppStrings.attemptingToReconnectIn} $delay...");
 
     await Future.delayed(delay);
@@ -67,11 +61,12 @@ class WebSocketClient<T> {
       await connect(socketUrl: _url);
       if (_isConnected) {
         Log.debug(AppStrings.reconnectionSuccessful);
-        _reconnectAttempts = 0;
       }
     } catch (e) {
       Log.error("${AppStrings.reconnectingAttemptFailed}: $e");
       _reconnect();
+    } finally {
+      _isReconnecting = false; // Allow further reconnections
     }
   }
 

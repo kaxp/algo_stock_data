@@ -52,6 +52,13 @@ class _HomePageState extends State<HomePage> {
                 duration: const Duration(seconds: 5),
               ),
             );
+          } else if (state is HomeOptionsSocketError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              CustomSnackbar(
+                message: state.errorMessage,
+                duration: const Duration(seconds: 5),
+              ),
+            );
           }
         },
         builder: (context, state) {
@@ -70,8 +77,11 @@ class _HomePageState extends State<HomePage> {
                     },
                     child: Column(
                       children: [
+                        const SizedBox(
+                          height: kSpacingMedium,
+                        ),
                         SizedBox(
-                          height: 36,
+                          height: kSpacingXLarge,
                           child: FilterListView(
                             expiryDates: state.expiryDates,
                             currentExpiryDate: state.currentExpiryDate,
