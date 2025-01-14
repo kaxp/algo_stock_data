@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 class OptionChainListView extends StatelessWidget {
   const OptionChainListView({
     super.key,
-    required this.optionsData,
+    required this.options,
     required this.currentExpiryDate,
   });
 
-  final Map<String, OptionData> optionsData;
+  final List<Option> options;
   final String currentExpiryDate;
 
   @override
@@ -18,13 +18,13 @@ class OptionChainListView extends StatelessWidget {
     return Expanded(
       child: ListView.separated(
         shrinkWrap: true,
-        itemCount: optionsData[currentExpiryDate]?.strike.length ?? 0,
+        itemCount: options.length,
         itemBuilder: (context, index) {
-          final strikeRow = optionsData[currentExpiryDate];
+          final strikeRow = options[index];
 
           return OptionChainListItem(
-            optionData: strikeRow,
-            keyValue: strikeRow?.strike[index],
+            option: strikeRow,
+            keyValue: strikeRow.strike,
             index: index,
           );
         },

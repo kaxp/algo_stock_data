@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _homeBloc.getOptionChainsWithLtp();
     _homeBloc.getValidContracts();
   }
 
@@ -65,25 +64,31 @@ class _HomePageState extends State<HomePage> {
           return LoadingOverlay(
             isLoading: state is HomeInitial || state is HomeLoading,
             child: state.optionsData.isNotEmpty
-                ? Column(
-                    children: [
-                      SizedBox(
-                        height: 36,
-                        child: FilterListView(
-                          expiryDates: state.expiryDates,
-                          currentExpiryDate: state.currentExpiryDate,
-                          onTap: _homeBloc.onFilterChange,
+                ? RefreshIndicator(
+                    onRefresh: () async {
+                      _homeBloc.getOptionChainsWithLtp();
+                    },
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 36,
+                          child: FilterListView(
+                            expiryDates: state.expiryDates,
+                            currentExpiryDate: state.currentExpiryDate,
+                            onTap: _homeBloc.onFilterChange,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: kSpacingSmall,
-                      ),
-                      const OptionChainListHeader(),
-                      OptionChainListView(
-                        optionsData: state.optionsData,
-                        currentExpiryDate: state.currentExpiryDate,
-                      ),
-                    ],
+                        const SizedBox(
+                          height: kSpacingSmall,
+                        ),
+                        const OptionChainListHeader(),
+                        OptionChainListView(
+                          options: state
+                              .optionsData[state.currentExpiryDate]!.options,
+                          currentExpiryDate: state.currentExpiryDate,
+                        ),
+                      ],
+                    ),
                   )
                 : const EmptyStateView(),
           );
