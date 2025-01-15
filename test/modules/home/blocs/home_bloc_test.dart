@@ -33,6 +33,14 @@ ContractsResponse _defaultContractsResponse() {
   );
 }
 
+ContractsResponse _emptyContractsResponse() {
+  return buildContractsResponseFromTemplate(
+    contracts: const ContractsData(
+      contractOptions: {},
+    ),
+  );
+}
+
 OptionChainResponse _defaultOptionChainResponse() {
   return buildOptionChainResponseFromTemplate(
     candle: '',
@@ -44,7 +52,7 @@ OptionChainResponse _defaultOptionChainResponse() {
   );
 }
 
-OptionChainResponse _defaultOptionChainEmptyResponse() {
+OptionChainResponse _emptyOptionChainResponse() {
   return buildOptionChainResponseFromTemplate(
     candle: '',
     underlying: '',
@@ -77,6 +85,61 @@ void main() {
   });
 
   group('HomeBloc Tests', () {
+    test('''Given getValidContracts() is called
+        When valid contract data is successfully returned
+        Then the state should transition to HomeLoading and getOptionChainsWithLtp is called''',
+        () async {
+      final bloc = HomeBloc(homeRepo: _mockHomeRepo);
+
+      when(_mockHomeRepo.getContracts(underlyingValue: 'BANKNIFTY'))
+          .thenAnswer((_) async => _defaultContractsResponse());
+
+      when(_mockHomeRepo.getOptionChains(underlyingValue: 'BANKNIFTY'))
+          .thenAnswer((_) async => _defaultOptionChainResponse());
+
+      await bloc.getValidContracts();
+
+      expect(bloc.validTokenCache.isNotEmpty, true);
+      expect(bloc.state, isA<HomeLoading>());
+      verify(_mockHomeRepo.getOptionChains(underlyingValue: 'BANKNIFTY'))
+          .called(1);
+    });
+
+    test('''Given getValidContracts() is called
+        When contracts data is empty
+        Then the validTokenCache should remain empty and state transitions properly''',
+        () async {
+      final bloc = HomeBloc(homeRepo: _mockHomeRepo);
+
+      when(_mockHomeRepo.getContracts(underlyingValue: 'BANKNIFTY'))
+          .thenAnswer((_) async => _emptyContractsResponse());
+
+      when(_mockHomeRepo.getOptionChains(underlyingValue: 'BANKNIFTY'))
+          .thenAnswer((_) async => _defaultOptionChainResponse());
+
+      await bloc.getValidContracts();
+
+      expect(bloc.validTokenCache.isEmpty, true);
+      expect(bloc.state, isA<HomeLoading>());
+      verify(_mockHomeRepo.getOptionChains(underlyingValue: 'BANKNIFTY'))
+          .called(1);
+    });
+
+    test('''Given getValidContracts() is called
+        When getValidContracts method throw DioException
+        Then the state should be HomeError''', () async {
+      final bloc = HomeBloc(homeRepo: _mockHomeRepo);
+
+      when(_mockHomeRepo.getContracts(underlyingValue: 'BANKNIFTY'))
+          .thenAnswer((_) async => throw MockDioException());
+
+      await bloc.getValidContracts();
+
+      expect(bloc.state, isA<HomeError>());
+      final errorState = bloc.state as HomeError;
+      expect(errorState.errorMessage, isNotEmpty);
+    });
+
     test('''Given getOptionChainsWithLtp() is called
         When option chain data is successfully returned
         Then the state should be HomeLoaded''', () async {
@@ -100,7 +163,7 @@ void main() {
       bloc.validTokenCache = {};
 
       when(_mockHomeRepo.getOptionChains(underlyingValue: 'BANKNIFTY'))
-          .thenAnswer((_) async => _defaultOptionChainEmptyResponse());
+          .thenAnswer((_) async => _emptyOptionChainResponse());
 
       await bloc.getOptionChainsWithLtp();
 
@@ -120,6 +183,8 @@ void main() {
       await bloc.getOptionChainsWithLtp();
 
       expect(bloc.state, isA<HomeError>());
+      final errorState = bloc.state as HomeError;
+      expect(errorState.errorMessage, isNotEmpty);
     });
   });
 }
