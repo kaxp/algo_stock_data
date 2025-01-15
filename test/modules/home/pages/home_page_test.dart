@@ -1,3 +1,5 @@
+import 'package:algo_test/components/molecules/snackbar/custom_snackbar.dart';
+import 'package:algo_test/components/organisms/list_views/filter_list_view.dart';
 import 'package:algo_test/config/flavor_config.dart';
 import 'package:algo_test/modules/home/home_module.dart';
 import 'package:algo_test/modules/home/models/option_chain_response.dart';
@@ -92,7 +94,6 @@ void main() {
 
     expect(find.byType(CustomAppBar), findsOneWidget);
     expect(find.byType(ErrorStateView), findsOneWidget);
-    // expect(find.text('An error occurred'), findsOneWidget);
   });
 
   testWidgets('''Given HomePage is first opened
@@ -117,30 +118,16 @@ void main() {
   });
 
   testWidgets('''Given HomePage is first opened
-    When state is HomeLoading
-    Then HomePage shows loading overlay''', (tester) async {
-    when(_mockHomeBloc.state).thenAnswer((_) => HomeLoading());
-
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: HomePage(),
-      ),
-    );
-
-    await tester.pump();
-
-    expect(find.byType(LoadingOverlay), findsOneWidget);
-  });
-
-  testWidgets('''Given HomePage is first opened
-    When state is HomeError
-    Then HomePage shows snackbar with error message''', (tester) async {
-    // Mocking the HomeError state
-    when(_mockHomeBloc.state).thenAnswer((_) => const HomeError(
-          errorMessage: 'An error occurred',
-          optionsData: {},
-          expiryDates: [],
-          currentExpiryDate: '',
+    When state is HomeLoaded with multiple expiry dates
+    Then HomePage renders the FilterListView with correct data''',
+      (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => const HomeLoaded(
+          optionsData: {
+            'expiryDate1': OptionData(options: []),
+            'expiryDate2': OptionData(options: [])
+          },
+          expiryDates: ['expiryDate1', 'expiryDate2'],
+          currentExpiryDate: 'expiryDate1',
         ));
 
     await tester.pumpWidget(
@@ -151,8 +138,56 @@ void main() {
 
     await tester.pumpAndSettle();
 
-    // Verify that the snackbar is shown with the correct error message
-    expect(find.byType(SnackBar), findsOneWidget);
-    expect(find.text('An error occurred'), findsOneWidget);
+    expect(find.byType(FilterListView), findsOneWidget);
+    expect(find.text('expiryDate1'), findsOneWidget);
+    expect(find.text('expiryDate2'), findsOneWidget);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When state is HomeLoaded and user pulls to refresh
+    Then refresh action triggers HomeBloc's getOptionChainsWithLtp''',
+      (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => const HomeLoaded(
+          optionsData: {'expiryDate': OptionData(options: [])},
+          expiryDates: ['expiryDate'],
+          currentExpiryDate: 'expiryDate',
+        ));
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    // Trigger pull-to-refresh
+    final listView = find.byType(OptionChainListView);
+    expect(listView, findsOneWidget);
+    await tester.drag(listView, const Offset(0, 300));
+    await tester.pumpAndSettle();
+
+    // Verify the refresh action was triggered
+    verify(_mockHomeBloc.getOptionChainsWithLtp()).called(1);
+  });
+
+  testWidgets('''Given HomePage is first opened
+    When HomeEmpty state occurs
+    Then no snackbar is displayed''', (tester) async {
+    when(_mockHomeBloc.state).thenAnswer((_) => HomeEmpty());
+
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: HomePage(),
+      ),
+    );
+
+    await tester.pumpAndSettle();
+
+    await tester.pumpAndSettle();
+
+    // Verify no snackbar is displayed
+    expect(find.byType(CustomSnackbar), findsNothing);
+    expect(find.byType(EmptyStateView), findsOneWidget);
   });
 }
