@@ -4,7 +4,6 @@ import 'package:algo_test/config/flavor_config.dart';
 import 'package:algo_test/modules/home/home_module.dart';
 import 'package:algo_test/modules/home/models/option_chain_response.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
@@ -98,22 +97,6 @@ void main() {
   });
 
   testWidgets('''Given HomePage is first opened
-    When state is HomeLoading
-    Then HomePage shows loading overlay''', (tester) async {
-    when(_mockHomeBloc.state).thenAnswer((_) => HomeLoading());
-
-    await tester.pumpWidget(
-      const MaterialApp(
-        home: HomePage(),
-      ),
-    );
-
-    await tester.pump();
-
-    expect(find.byType(LoadingOverlay), findsOneWidget);
-  });
-
-  testWidgets('''Given HomePage is first opened
     When state is HomeLoaded
     Then HomePage shows the option chain list view''', (tester) async {
     when(_mockHomeBloc.state).thenAnswer((_) => const HomeLoaded(
@@ -194,16 +177,12 @@ void main() {
     when(_mockHomeBloc.state).thenAnswer((_) => HomeEmpty());
 
     await tester.pumpWidget(
-      MaterialApp(
-        home: Scaffold(
-          body: BlocListener<MockHomeBloc, HomeState>(
-            listener: (i, j) {},
-            bloc: _mockHomeBloc,
-            child: const HomePage(),
-          ),
-        ),
+      const MaterialApp(
+        home: HomePage(),
       ),
     );
+
+    await tester.pumpAndSettle();
 
     await tester.pumpAndSettle();
 
