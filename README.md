@@ -97,7 +97,7 @@ This application is developed on Flutter v3.19.6 in the Stable channel.
 ### Screenshots
 
 
-<img width = "300" src="https://github.com/user-attachments/assets/0a069594-4c4a-4f35-b196-fe1da57918af">      <img width = "300" src="https://github.com/user-attachments/assets/fee1c198-a2ff-4e32-a64d-cade610715e2">
+<img width = "300" src="https://github.com/user-attachments/assets/8b48e2e0-e582-4556-b261-3278de85b71b">         <img width = "300" src="https://github.com/user-attachments/assets/dbd825a4-9452-45a6-91d2-bb2d9a2bebe9">      
 
 
 ### Screen Recording
