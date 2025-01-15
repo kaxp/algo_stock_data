@@ -85,6 +85,14 @@ This application is developed on Flutter v3.19.6 in the Stable channel.
    - `flutter run --release`
 6. running the unit and widget tests
    - `flutter test`
+  
+
+
+### Assumptions
+1. Some intended behaviours in the app
+  -  Background State is not managed in the app for WebSocket.
+  -  No retry mechanism in the Error State of the app.
+
 
 ### Screenshots
 
