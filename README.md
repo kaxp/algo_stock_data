@@ -98,3 +98,6 @@ This application is developed on Flutter v3.19.6 in the Stable channel.
 
 https://github.com/user-attachments/assets/ab324fb0-c569-4bf6-8e92-f6658f35534c
 
+### APK Link
+[Link](https://i.diawi.com/SLFQ8W)
+
