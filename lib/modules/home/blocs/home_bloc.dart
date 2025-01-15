@@ -23,7 +23,7 @@ class HomeBloc extends Cubit<HomeState> {
   ///
   /// It maps `token` (String) to its corresponding
   /// `ContractOptionData` received in /contracts API.
-  late final Map<String, ContractOptionData> validTokenCache;
+  late Map<String, ContractOptionData> validTokenCache = {};
 
   /// [getValidContracts] fetches all the valid contracts
   /// for specified underlying value(e.g. 'BANKNIFTY) and
