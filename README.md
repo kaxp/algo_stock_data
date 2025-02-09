@@ -2,11 +2,10 @@
 
 This application is developed on Flutter v3.19.6 in the Stable channel.
 
-## 📌 Quick Navigation  
+### 📌 Quick Navigation  
 🔹 [Objective](#objective)  
-🔹 [Implementation](#implementation)  
-🔹 [Project tree](#project-tree)  
-🔹 [Project Setup](#project-setup)  
+🔹 [Codebase Structure](#codebase-structure)  
+🔹 [Tech Stack Overview](#tech-stack-overview)  
 🔹 [Screenshots & Recording](#screenshots)  
 🔹 [APK Link](#apk-link) 
 
@@ -58,8 +57,7 @@ using data from a Public API and WebSocket.
 > 2. To match the token received in WebSocket to the exact contract, use the response from the `contracts` API call we made initially. <br>
 > 3. If a valid contract is found, update the value of call/strike data received in `option-chain-with-ltp` API based on the value of 'option_type' from valid contract.
   
-## Implementation
-### Project tree
+### Codebase Structure
 
 ```bash
 |-- lib/
@@ -118,7 +116,7 @@ using data from a Public API and WebSocket.
       └── dio_error_extension_test.dart
 ```
 
-### Project Setup:
+### Tech Stack Overview
 
 - Architecture Pattern- [Layered Architecture](https://www.sciencedirect.com/topics/computer-science/layered-architecture)
 - Design Pattern- [Atomic Design Pattern](https://atomicdesign.bradfrost.com/chapter-2/)
@@ -132,7 +130,7 @@ using data from a Public API and WebSocket.
 - Http client - [dio](https://pub.dev/packages/dio) with [retrofit](https://pub.dev/packages/retrofit) as dio client generator
 - Web Socket client - [web_socket_channel](https://pub.dev/packages/web_socket_channel)
 
-### Steps for running the application-
+### Steps for running the application
 
 1. Install Flutter following `https://docs.flutter.dev/get-started/install`
 2. Clone the project using the command `git clone https://github.com/kaxp/algo_stocks.git`
