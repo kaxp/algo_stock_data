@@ -2,6 +2,13 @@
 
 This application is developed on Flutter v3.19.6 in the Stable channel.
 
+### 📌 Quick Navigation  
+🔹 [Objective](#objective)  
+🔹 [Codebase Structure](#codebase-structure)  
+🔹 [Tech Stack Overview](#tech-stack-overview)  
+🔹 [Screenshots & Recording](#screenshots)  
+🔹 [APK Link](#apk-link) 
+
 ### Objective
 Build a real-time option chain for BANKNIFTY that updates every few seconds
 using data from a Public API and WebSocket.
@@ -18,44 +25,39 @@ using data from a Public API and WebSocket.
 
 - <img width = "300" src="https://github.com/user-attachments/assets/06eaf684-9800-42b3-9bfc-60d4f3f2f05f">
 
-  
-
-
-
 ### API Integration(You’ll need VPN):
 1. For the initial load of the page, you should call
    - https://prices.loremipsum.xyz/contracts?underlying=BANKNIFTY -> To get the info on all the valid contracts
    - https://prices.loremipsum.xyz/option-chain-with-ltp?underlying=BANKNIFTY -> To get the latest option chain of Banknifty
-2. Websocket: https://prices.loremipsum.xyz/mock/updates
+2. WebSocket: https://prices.loremipsum.xyz/mock/updates
    - After connection send the following JSON message, Replace expiry with whatever expiry you’re currently on
 ```
 {
-  msg: {
-    type: ‘subscribe,
-    datatypes: [
-      ’ltp’
+  "msg": {
+    "type": "subscribe",
+    "datatypes": [
+      "ltp"
     ],
-    underlyings: [
+    "underlyings": [
       {
-        underlying: ‘BANKNIFTY’,
-        cash: true,
-        options: [
-          expiry
-        ],
-      },
-    ],
-  },
+        "underlying": "BANKNIFTY",
+        "cash": true,
+        "options": [
+          "expiry"
+        ]
+      }
+    ]
+  }
 }
 ```
 
 
 
-> 1. The response from websocket will be a list, in this list every item will have a token, close/ltp/price, and timestamp. <br>
-> 2. To match the token received in webscoket to the exact contract, use the response from the `contracts` API call we made initially. <br>
+> 1. The response from WebSocket will be a list, in this list every item will have a token, close/ltp/price, and timestamp. <br>
+> 2. To match the token received in WebSocket to the exact contract, use the response from the `contracts` API call we made initially. <br>
 > 3. If a valid contract is found, update the value of call/strike data received in `option-chain-with-ltp` API based on the value of 'option_type' from valid contract.
   
-
-# Project tree
+### Codebase Structure
 
 ```bash
 |-- lib/
@@ -114,7 +116,7 @@ using data from a Public API and WebSocket.
       └── dio_error_extension_test.dart
 ```
 
-# Project Setup:
+### Tech Stack Overview
 
 - Architecture Pattern- [Layered Architecture](https://www.sciencedirect.com/topics/computer-science/layered-architecture)
 - Design Pattern- [Atomic Design Pattern](https://atomicdesign.bradfrost.com/chapter-2/)
@@ -128,7 +130,7 @@ using data from a Public API and WebSocket.
 - Http client - [dio](https://pub.dev/packages/dio) with [retrofit](https://pub.dev/packages/retrofit) as dio client generator
 - Web Socket client - [web_socket_channel](https://pub.dev/packages/web_socket_channel)
 
-### Steps for running the application-
+### Steps for running the application
 
 1. Install Flutter following `https://docs.flutter.dev/get-started/install`
 2. Clone the project using the command `git clone https://github.com/kaxp/algo_stocks.git`
@@ -138,7 +140,6 @@ using data from a Public API and WebSocket.
    - `flutter run --release`
 6. running the unit and widget tests
    - `flutter test`
-  
 
 
 ### Assumptions
@@ -148,16 +149,12 @@ using data from a Public API and WebSocket.
 
 
 ### Screenshots
-
-
 <img width = "300" src="https://github.com/user-attachments/assets/8b48e2e0-e582-4556-b261-3278de85b71b">         <img width = "300" src="https://github.com/user-attachments/assets/dbd825a4-9452-45a6-91d2-bb2d9a2bebe9">      
-
 
 ### Screen Recording
 
-
-
 https://github.com/user-attachments/assets/ab324fb0-c569-4bf6-8e92-f6658f35534c
+
 
 ### APK Link
 [Link](https://i.diawi.com/SLFQ8W)
