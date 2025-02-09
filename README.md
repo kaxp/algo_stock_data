@@ -1,6 +1,59 @@
-# AlgoTest
+# AlgoStocks
 
 This application is developed on Flutter v3.19.6 in the Stable channel.
+
+### Objective
+Build a real-time option chain for BANKNIFTY that updates every few seconds
+using data from a Public API and WebSocket.
+
+### Project Details:
+1. Display a table with option contracts (calls and puts)
+2. An option chain has multiple expiries. ( show these as filters on top)
+3. Each EXPIRY has a list of tradable strikes ( these are rows )
+4. Each STRIKE has a CALL and PUT associated with it ( these are the two columns on both sides of STRIKE)
+5. Each row in the table should show:
+- Call Price
+- Strike
+- Put Price
+
+- <img width = "300" src="https://github.com/user-attachments/assets/06eaf684-9800-42b3-9bfc-60d4f3f2f05f">
+
+  
+
+
+
+### API Integration(You’ll need VPN):
+1. For the initial load of the page, you should call
+   - https://prices.loremipsum.xyz/contracts?underlying=BANKNIFTY -> To get the info on all the valid contracts
+   - https://prices.loremipsum.xyz/option-chain-with-ltp?underlying=BANKNIFTY -> To get the latest option chain of Banknifty
+2. Websocket: https://prices.loremipsum.xyz/mock/updates
+   - After connection send the following JSON message, Replace expiry with whatever expiry you’re currently on
+```
+{
+  msg: {
+    type: ‘subscribe,
+    datatypes: [
+      ’ltp’
+    ],
+    underlyings: [
+      {
+        underlying: ‘BANKNIFTY’,
+        cash: true,
+        options: [
+          expiry
+        ],
+      },
+    ],
+  },
+}
+```
+
+
+
+> 1. The response from websocket will be a list, in this list every item will have a token, close/ltp/price, and timestamp. <br>
+> 2. To match the token received in webscoket to the exact contract, use the response from the `contracts` API call we made initially. <br>
+> 3. If a valid contract is found, update the value of call/strike data received in `option-chain-with-ltp` API based on the value of 'option_type' from valid contract.
+  
 
 # Project tree
 
@@ -78,7 +131,7 @@ This application is developed on Flutter v3.19.6 in the Stable channel.
 ### Steps for running the application-
 
 1. Install Flutter following `https://docs.flutter.dev/get-started/install`
-2. Clone the project using the command `git clone https://github.com/kaxp/algo_test.git`
+2. Clone the project using the command `git clone https://github.com/kaxp/algo_stocks.git`
 3. run `flutter pub get`
 4. run `flutter pub run build_runner build`
 5. run the application on Android device
